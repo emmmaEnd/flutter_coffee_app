@@ -1,7 +1,5 @@
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:pryandroid/utils/value_listener.dart';
-
+import '../models/product.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,70 +15,179 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedTab = _SelectedTab.values[i];
     });
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        actions:[
-          ValueListenableBuilder(
-            valueListenable: ValueListener.isDark, 
-            builder: (context, value, child) {
-              return value
-              ? IconButton(icon: Icon(Icons.nightlight),onPressed: (){
-                ValueListener.isDark.value = false;
-              },)
-              : IconButton(icon: Icon (Icons.sunny),onPressed: (){
-                ValueListener.isDark.value = true;
-              });
-            },
-            )
-          
-        ],
+      // barra superior
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: SafeArea(
+          child: Container(
+            color: Colors.pinkAccent,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // perfil + textp
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: const AssetImage("assets/profile-pic.png"),
+                      radius: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Welcome",
+                            style: TextStyle(color: Colors.white)),
+                        Text("Mr. Yev Yev",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
+                    ),
+                  ],
+                ),
+
+                // icono
+                Row(
+                  children: [
+                    const Icon(Icons.search, color: Colors.white, size: 28),
+                    const SizedBox(width: 16),
+                    Stack(
+                      children: [
+                        const Icon(Icons.notifications,
+                            color: Colors.white, size: 28),
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                              color: Colors.yellow,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Text(
+                              "6",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      
-      drawer: Drawer(),
-      body: Center(child: Text("Cambio A"),),
-      bottomNavigationBar: 
-      DotNavigationBar(
-        enableFloatingNavBar: false,//arreglo pixel overflow
-        margin: EdgeInsets.only(left: 10, right: 10),
+
+      // cuerpo
+      body: GridView.builder(
+        padding: const EdgeInsets.all(12),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.7,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Imagen del producto
+                ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(16)),
+                  child: Image.asset(
+                    product.image,
+                    fit: BoxFit.cover,
+                    height: 120,
+                    width: double.infinity,
+                  ),
+                ),
+                // Información
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(product.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                            "\$${product.oldPrice.toStringAsFixed(2)}",
+                            style: const TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            "\$${product.price.toStringAsFixed(2)}",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          const Icon(Icons.star,
+                              color: Colors.amber, size: 16),
+                          const SizedBox(width: 4),
+                          Text("${product.rating} rating",
+                              style: const TextStyle(
+                                  color: Colors.orange, fontSize: 12)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+
+      // barra inferior
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.pinkAccent,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
         currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-        dotIndicatorColor: Colors.white,
-        unselectedItemColor: Colors.grey[300],
-        splashBorderRadius: 50,
-        // enableFloatingNavBar: false,
         onTap: _handleIndexChanged,
-        items: [
-          /// Home
-          DotNavigationBarItem(
-            icon: Icon(Icons.home),
-            selectedColor: Color(0xff73544C),
-          ),
-      
-          /// Likes
-          DotNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            selectedColor: Color(0xff73544C),
-          ),
-      
-          /// Search
-          DotNavigationBarItem(
-            icon: Icon(Icons.search),
-            selectedColor: Color(0xff73544C),
-          ),
-      
-          /// Profile
-          DotNavigationBarItem(
-            icon: Icon(Icons.person),
-            selectedColor: Color(0xff73544C),
-          ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
   }
 }
 
-enum _SelectedTab { home, favorite, search, person }
+enum _SelectedTab { home, orders, chat, cart, profile }

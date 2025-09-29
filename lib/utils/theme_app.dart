@@ -5,13 +5,13 @@ class ThemeApp {
     final theme = ThemeData.dark().copyWith(
       colorScheme:ColorScheme(
         brightness: Brightness.dark, 
-        primary: const Color(0xFF181818), 
+        primary: const Color.fromARGB(255, 255, 255, 255), 
         onPrimary: const Color(0xFFA9A9A9), 
-        secondary: const Color(0xFF181818), 
+        secondary: const Color.fromARGB(255, 255, 255, 255), 
         onSecondary: const Color(0xFFA9A9A9),
         error: Colors.red, 
         onError: Colors.red, 
-        surface: const Color(0xFF212121), 
+        surface: const Color.fromARGB(255, 255, 255, 255), 
         onSurface: const Color(0xFFA9A9A9))
     );
     return theme;
