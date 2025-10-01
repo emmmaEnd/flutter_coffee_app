@@ -26,7 +26,7 @@ class ThemeApp {
         onSecondary: const Color(0xFFAB2222),
         error: Colors.red, 
         onError: Colors.red,
-        surface: const Color(0xFFF3C975), 
+        surface: const Color(0xFFF2F2F2), 
         onSurface: const Color(0xFFAB2222),
         )
     );

@@ -4,6 +4,7 @@ class Product {
   final double oldPrice;
   final double price;
   final int rating;
+  final double stars;
   final bool isFavorite;
 
   Product({
@@ -12,6 +13,7 @@ class Product {
     required this.oldPrice,
     required this.price,
     required this.rating,
+    required this.stars,
     this.isFavorite = false,
   });
 }
@@ -24,6 +26,7 @@ final List<Product> products = [
     oldPrice: 5.50,
     price: 3.50,
     rating: 152,
+    stars: 3.5,
     isFavorite: true,
   ),
   Product(
@@ -31,7 +34,9 @@ final List<Product> products = [
     image: "assets/ice_green_tea.png",
     oldPrice: 2.50,
     price: 1.50,
+    stars: 4.0,
     rating: 302,
+    isFavorite: false,
   ),
   Product(
     name: "Hot Expresso",
@@ -39,6 +44,8 @@ final List<Product> products = [
     oldPrice: 3.20,
     price: 2.20,
     rating: 92,
+    stars: 4,
+    isFavorite: false,
   ),
   Product(
     name: "Amakado Hot",
@@ -46,6 +53,7 @@ final List<Product> products = [
     oldPrice: 3.50,
     price: 2.50,
     rating: 34,
-    isFavorite: true,
+    stars: 4,
+    isFavorite: false,
   ),
 ];

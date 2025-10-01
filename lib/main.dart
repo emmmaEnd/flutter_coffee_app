@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     valueListenable: ValueListener.isDark,
       builder: (context, value,_) {
         return MaterialApp(
-          theme: value ? ThemeApp.darkTheme() : ThemeApp.lightTheme(),
+          theme: value ? ThemeApp.lightTheme() : ThemeApp.darkTheme(),
           routes: {
             "/home": (context) => const HomeScreen(),
             "/register": (context) => const RegisterScreen(),
