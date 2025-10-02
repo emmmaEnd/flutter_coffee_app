@@ -20,30 +20,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // barra superior
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: SafeArea(
           child: Container(
             color: Colors.pinkAccent,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: 
-            Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // perfil + textp
                 Row(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: const AssetImage("assets/profile-pic.png"),
+                    const CircleAvatar(
+                      backgroundImage: AssetImage("assets/profile-pic.png"),
                       radius: 20,
                     ),
                     const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text("Welcome",
-                            style: TextStyle(color: Colors.white)),
+                        Text("Welcome", style: TextStyle(color: Colors.white)),
                         Text("Mr. Yev Yev",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -52,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-
-                // icono
                 Row(
                   children: [
                     const Icon(Icons.search, color: Colors.white, size: 28),
@@ -73,8 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Text(
                               "6",
                               style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -87,8 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-
-      // cuerpo
       body: Container(
         color: Colors.white,
         child: Column(
@@ -98,13 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Text(
                 "Coffee",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
-
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(12),
@@ -112,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 0.7, // <- proporción general
+                  childAspectRatio: 0.7,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
@@ -122,100 +109,118 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     elevation: 3,
-                    child: Padding( padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/product",
+                            arguments: product);
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Imagen ocupa 70%
                           Expanded(
                             flex: 6,
                             child: Stack(
                               children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                                  child: Image.asset(
-                                    product.image,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
+                                Hero(
+                                  tag: "product-img-${product.name}",
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(16)),
+                                    child: Image.asset(
+                                      product.image,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                 ),
                                 Positioned(
                                   top: 8,
                                   right: 8,
-                                  child: Icon(
-                                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                                    color: product.isFavorite ? Colors.pink : Colors.white,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        product.isFavorite =
+                                            !product.isFavorite;
+                                      });
+                                    },
+                                    child: Icon(
+                                      product.isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: product.isFavorite
+                                          ? Colors.pink
+                                          : Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-
-                          // Texto ocupa 30%
                           Expanded(
                             flex: 4,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     product.name,
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
 
-                                  // Precio
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        "Price",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Price",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            
+                                          ),
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "\$${product.oldPrice.toStringAsFixed(2)}",
-                                            style: const TextStyle(
-                                              fontSize: 16, // mismo tamaño
-                                              decoration: TextDecoration.lineThrough, // tachado
-                                              color: Colors.black,
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "\$${product.oldPrice.toStringAsFixed(2)}",
+                                              style: const TextStyle(
+                                                fontSize: 16, // mismo tamaño
+                                                decoration: TextDecoration.lineThrough, // tachado
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            "\$${product.price.toStringAsFixed(2)}",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black, 
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              "\$${product.price.toStringAsFixed(2)}",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black, 
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-
-
-                                  // Estrellas + rating
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                    
                                   Row(
                                     children: [
                                       ...List.generate(5, (i) {
                                         double starValue = product.stars - i;
                                         if (starValue >= 1) {
-                                          return const Icon(Icons.star, color: Colors.amber, size: 16);
+                                          return const Icon(Icons.star,
+                                              color: Colors.amber, size: 16);
                                         } else if (starValue > 0) {
-                                          return const Icon(Icons.star_half, color: Colors.amber, size: 16);
+                                          return const Icon(Icons.star_half,
+                                              color: Colors.amber, size: 16);
                                         } else {
-                                          return const Icon(Icons.star_border, color: Colors.grey, size: 16);
+                                          return const Icon(Icons.star_border,
+                                              color: Colors.grey, size: 16);
                                         }
                                       }),
                                       const SizedBox(width: 6),
@@ -242,9 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
-
-      // barra inferior
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.pinkAccent,
@@ -256,8 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Orders"),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),

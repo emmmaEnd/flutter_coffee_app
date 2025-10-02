@@ -5,7 +5,10 @@ class Product {
   final double price;
   final int rating;
   final double stars;
-  final bool isFavorite;
+  bool isFavorite;
+  bool inCart;
+  int cartCount;
+  final String description;
 
   Product({
     required this.name,
@@ -15,8 +18,12 @@ class Product {
     required this.rating,
     required this.stars,
     this.isFavorite = false,
+    this.inCart = false,
+    this.cartCount = 0,
+    this.description = "Lorem ipsum!!!",
   });
 }
+
 
 
 final List<Product> products = [
@@ -28,6 +35,7 @@ final List<Product> products = [
     rating: 152,
     stars: 3.5,
     isFavorite: true,
+    description: "Fresh mocha frappe xd",
   ),
   Product(
     name: "Ice Green Tea",
