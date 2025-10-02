@@ -11,10 +11,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var _selectedTab = _SelectedTab.home;
 
-  void _handleIndexChanged(int i) {
-    setState(() {
-      _selectedTab = _SelectedTab.values[i];
-    });
+  void _onTabTapped(int index) {
+    final tab = _SelectedTab.values[index];
+    if (tab == _SelectedTab.cart) {
+      Navigator.pushReplacementNamed(context, "/cart");
+    } else if (tab == _SelectedTab.profile) {
+      Navigator.pushReplacementNamed(context, "/profile");
+    } else {
+      setState(() {
+        _selectedTab = tab;
+      });
+    }
   }
 
   @override
@@ -174,40 +181,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-
                                   Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          "Price",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Price",
+                                          style: TextStyle(fontSize: 16)),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "\$${product.oldPrice.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              decoration: TextDecoration
+                                                  .lineThrough,
+                                              color: Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "\$${product.oldPrice.toStringAsFixed(2)}",
-                                              style: const TextStyle(
-                                                fontSize: 16, // mismo tamaño
-                                                decoration: TextDecoration.lineThrough, // tachado
-                                                color: Colors.black,
-                                              ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            "\$${product.price.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
                                             ),
-                                            const SizedBox(width: 6),
-                                            Text(
-                                              "\$${product.price.toStringAsFixed(2)}",
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black, 
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                    
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                   Row(
                                     children: [
                                       ...List.generate(5, (i) {
@@ -224,13 +226,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }
                                       }),
                                       const SizedBox(width: 6),
-                                      Text(
-                                        "${product.rating} rating",
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
+                                      Text("${product.rating} rating",
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.orange)),
                                     ],
                                   ),
                                 ],
@@ -247,21 +246,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.pinkAccent,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-        onTap: _handleIndexChanged,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
+      bottomNavigationBar: _buildBottomBar(),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.pinkAccent,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white70,
+      currentIndex: _SelectedTab.values.indexOf(_selectedTab),
+      onTap: _onTabTapped,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Orders"),
+        BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      ],
     );
   }
 }
