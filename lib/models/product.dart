@@ -54,6 +54,6 @@ final List<Product> products = [
     price: 2.50,
     rating: 34,
     stars: 4,
-    isFavorite: false,
+    isFavorite: true,
   ),
 ];

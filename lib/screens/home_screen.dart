@@ -27,7 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             color: Colors.pinkAccent,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
+            child: 
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // perfil + textp
@@ -90,109 +91,158 @@ class _HomeScreenState extends State<HomeScreen> {
       // cuerpo
       body: Container(
         color: Colors.white,
-        child: GridView.builder(
-          padding: const EdgeInsets.all(12),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.7,
-          ),
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0), // margen interno de la card
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Imagen ocupa 70% de la altura
-                    Expanded(
-                      flex: 7, // 70%
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                        child: Image.asset(
-                          product.image,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                      ),
-                    ),
-
-                    // Texto ocupa 30% de la altura
-                    Expanded(
-                      flex: 3, // 30%
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // reparte el espacio
-                          children: [
-                            Text(
-                              product.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-
-                            Row(
-                              children: [
-                                Text(
-                                  "\$${product.oldPrice.toStringAsFixed(2)}",
-                                  style: const TextStyle(
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  "\$${product.price.toStringAsFixed(2)}",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              children: [
-                                const Icon(Icons.star, color: Colors.amber, size: 16),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "${product.rating} rating",
-                                  style: const TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Text(
+                "Coffee",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
                 ),
-
               ),
-            );
+            ),
 
-            
-          },
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(12),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.7, // <- proporción general
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 3,
+                    child: Padding( padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Imagen ocupa 70%
+                          Expanded(
+                            flex: 6,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                                  child: Image.asset(
+                                    product.image,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: Icon(
+                                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                                    color: product.isFavorite ? Colors.pink : Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Texto ocupa 30%
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    product.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+
+                                  // Precio
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        "Price",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "\$${product.oldPrice.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                              fontSize: 16, // mismo tamaño
+                                              decoration: TextDecoration.lineThrough, // tachado
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            "\$${product.price.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black, 
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+
+                                  // Estrellas + rating
+                                  Row(
+                                    children: [
+                                      ...List.generate(5, (i) {
+                                        double starValue = product.stars - i;
+                                        if (starValue >= 1) {
+                                          return const Icon(Icons.star, color: Colors.amber, size: 16);
+                                        } else if (starValue > 0) {
+                                          return const Icon(Icons.star_half, color: Colors.amber, size: 16);
+                                        } else {
+                                          return const Icon(Icons.star_border, color: Colors.grey, size: 16);
+                                        }
+                                      }),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        "${product.rating} rating",
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
+
 
       // barra inferior
       bottomNavigationBar: BottomNavigationBar(
